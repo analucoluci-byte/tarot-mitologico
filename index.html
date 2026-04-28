@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarô Mitológico Grego</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #c9a96e;
+    --gold-light: #e8d5a3;
+    --gold-dark: #8b6e3a;
+    --bg-deep: #0d0b18;
+    --bg-mid: #13101f;
+    --bg-card: #1a1630;
+    --text-primary: #f0e8d5;
+    --text-secondary: #a89878;
+    --text-muted: #5a5070;
+    --accent: #7b5ea7;
+    --accent-light: #b8a0d8;
+    --red-reversed: #c07070;
+  }
+
+  html, body {
+    min-height: 100%;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'Crimson Text', Georgia, serif;
+    overflow-x: hidden;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(123,94,167,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(201,169,110,0.08) 0%, transparent 60%),
+      var(--bg-deep);
+    min-height: 100vh;
+  }
+
+  /* Stars background */
+  .stars {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle var(--dur, 3s) infinite alternate;
+    opacity: var(--op, 0.3);
+  }
+
+  @keyframes twinkle {
+    from { opacity: var(--op, 0.3); }
+    to { opacity: calc(var(--op, 0.3) * 0.2); }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 4rem;
+    text-align: center;
+  }
+
+  /* Header */
+  .header {
+    margin-bottom: 2.5rem;
+    animation: fadeDown 1s ease both;
+  }
+
+  .header-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .ornament-line {
+    flex: 1;
+    max-width: 80px;
+    height: 0.5px;
+    background: linear-gradient(to right, transparent, var(--gold));
+  }
+
+  .ornament-line.right {
+    background: linear-gradient(to left, transparent, var(--gold));
+  }
+
+  .ornament-symbol {
+    color: var(--gold);
+    font-size: 18px;
+    letter-spacing: 6px;
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    font-weight: 400;
+    color: var(--gold-light);
+    letter-spacing: 0.15em;
+    line-height: 1.3;
+    text-shadow: 0 0 40px rgba(201,169,110,0.3);
+  }
+
+  .subtitle {
+    font-family: 'Crimson Text', serif;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-top: 0.6rem;
+    font-style: italic;
+    letter-spacing: 0.05em;
+  }
+
+  /* Instruction */
+  .instruction {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.8rem;
+    font-style: italic;
+    animation: fadeIn 1.2s ease both 0.3s;
+  }
+
+  /* Shuffle button */
+  .btn-shuffle {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    background: transparent;
+    border: 0.5px solid var(--gold-dark);
+    padding: 12px 36px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    margin-bottom: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 1.2s ease both 0.5s;
+  }
+
+  .btn-shuffle::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(201,169,110,0.06);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .btn-shuffle:hover::before { opacity: 1; }
+  .btn-shuffle:hover { border-color: var(--gold); box-shadow: 0 0 20px rgba(201,169,110,0.15); }
+  .btn-shuffle:active { transform: scale(0.98); }
+  .btn-shuffle:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Shuffle animation */
+  .shuffle-dots {
+    display: none;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 2rem;
+    height: 20px;
+    align-items: center;
+  }
+
+  .shuffle-dots.active { display: flex; }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: dotBounce 0.7s infinite alternate;
+  }
+
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes dotBounce {
+    from { transform: translateY(0); opacity: 0.3; }
+    to { transform: translateY(-10px); opacity: 1; }
+  }
+
+  /* Cards row */
+  .cards-row {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .card-slot { width: 175px; }
+
+  .pos-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* Flip card */
+  .card-flip {
+    width: 175px;
+    height: 265px;
+    perspective: 1000px;
+    cursor: pointer;
+  }
+
+  .card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-inner.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    width: 100%; height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  /* Card back */
+  .card-back {
+    background: var(--bg-card);
+    border: 0.5px solid rgba(201,169,110,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-back svg { opacity: 0.7; }
+
+  /* Card front */
+  .card-front {
+    transform: rotateY(180deg);
+    background: var(--bg-card);
+    border: 0.5px solid rgba(201,169,110,0.35);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 14px 10px 12px;
+    gap: 0;
+  }
+
+  .card-front.reversed-card {
+    border-color: rgba(192,112,112,0.4);
+  }
+
+  .card-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    color: var(--gold-dark);
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+  }
+
+  .card-symbol {
+    font-size: 38px;
+    line-height: 1;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 0 8px rgba(201,169,110,0.4));
+  }
+
+  .card-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--gold-light);
+    text-align: center;
+    line-height: 1.3;
+    margin-bottom: 3px;
+  }
+
+  .card-deity {
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+  }
+
+  .card-divider {
+    width: 36px;
+    height: 0.5px;
+    background: rgba(201,169,110,0.3);
+    margin-bottom: 10px;
+  }
+
+  .card-meaning {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    text-align: center;
+    line-height: 1.55;
+    flex: 1;
+  }
+
+  .tag-reversed {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    color: var(--red-reversed);
+    letter-spacing: 0.1em;
+    margin-top: 8px;
+    padding: 3px 10px;
+    border: 0.5px solid rgba(192,112,112,0.3);
+    border-radius: 2px;
+  }
+
+  /* Hover on card-flip */
+  .card-flip:not(.done):hover .card-back {
+    border-color: rgba(201,169,110,0.5);
+    box-shadow: 0 0 20px rgba(201,169,110,0.12);
+  }
+
+  /* Hint */
+  .hint {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: italic;
+    min-height: 1.2em;
+    transition: opacity 0.4s;
+  }
+
+  /* Footer */
+  .footer-ornament {
+    margin-top: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    opacity: 0.4;
+  }
+
+  .footer-line {
+    flex: 1;
+    max-width: 120px;
+    height: 0.5px;
+    background: var(--gold);
+  }
+
+  .footer-glyph {
+    color: var(--gold);
+    font-size: 14px;
+    letter-spacing: 4px;
+  }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes cardReveal {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .cards-row { animation: fadeIn 0.6s ease both 0.6s; }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .card-slot { width: 140px; }
+    .card-flip { width: 140px; height: 215px; }
+    .cards-row { gap: 10px; }
+    .card-symbol { font-size: 30px; }
+    .card-name { font-size: 0.7rem; }
+    .card-meaning { font-size: 0.72rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Stars -->
+<div class="stars" id="stars"></div>
+
+<div class="container">
+
+  <header class="header">
+    <div class="header-ornament">
+      <div class="ornament-line"></div>
+      <div class="ornament-symbol">✦ ✦ ✦</div>
+      <div class="ornament-line right"></div>
+    </div>
+    <h1>Tarô Mitológico Grego</h1>
+    <p class="subtitle">Os deuses do Olimpo revelam sua mensagem</p>
+  </header>
+
+  <p class="instruction">Mentalize sua questão com clareza.<br>Quando sentir que é a hora, embaralhe.</p>
+
+  <button class="btn-shuffle" id="btnShuffle" onclick="shuffle()">✦ Embaralhar ✦</button>
+
+  <div class="shuffle-dots" id="shuffleDots">
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
+
+  <div class="cards-row" id="cardsRow">
+    <div class="card-slot">
+      <div class="pos-label">Passado</div>
+      <div class="card-flip" id="flip0" onclick="flip(0)">
+        <div class="card-inner" id="inner0">
+          <div class="card-face card-back" id="back0">
+            <svg width="110" height="160" viewBox="0 0 110 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="55" cy="80" r="50" stroke="#c9a96e" stroke-width="0.5" opacity="0.5"/>
+              <circle cx="55" cy="80" r="38" stroke="#c9a96e" stroke-width="0.5" opacity="0.35"/>
+              <circle cx="55" cy="80" r="26" stroke="#c9a96e" stroke-width="0.5" opacity="0.2"/>
+              <polygon points="55,38 66,61 91,61 71,76 79,99 55,84 31,99 39,76 19,61 44,61" stroke="#c9a96e" stroke-width="0.5" fill="none" opacity="0.6"/>
+              <circle cx="55" cy="80" r="5" fill="#c9a96e" opacity="0.5"/>
+              <line x1="55" y1="30" x2="55" y2="130" stroke="#c9a96e" stroke-width="0.3" opacity="0.15"/>
+              <line x1="5" y1="80" x2="105" y2="80" stroke="#c9a96e" stroke-width="0.3" opacity="0.15"/>
+              <line x1="19" y1="44" x2="91" y2="116" stroke="#c9a96e" stroke-width="0.3" opacity="0.15"/>
+              <line x1="91" y1="44" x2="19" y2="116" stroke="#c9a96e" stroke-width="0.3" opacity="0.15"/>
+            </svg>
+          </div>
+          <div class="card-face card-front" id="front0"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-slot">
+      <div class="pos-label">Presente</div>
+      <div class="card-flip" id="flip1" onclick="flip(1)">
+        <div class="card-inner" id="inner1">
+          <div class="card-face card-back" id="back1">
+            <svg width="110" height="160" viewBox="0 0 110 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="55" cy="80" r="50" stroke="#c9a96e" stroke-width="0.5" opacity="0.5"/>
+              <circle cx="55" cy="80" r="38" stroke="#c9a96e" stroke-width="0.5" opacity="0.35"/>
+              <circle cx="55" cy="80" r="26" stroke="#c9a96e" stroke-width="0.5" opacity="0.2"/>
+              <polygon points="55,38 66,61 91,61 71,76 79,99 55,84 31,99 39,76 19,61 44,61" stroke="#c9a96e" stroke-width="0.5" fill="none" opacity="0.6"/>
+              <circle cx="55" cy="80" r="5" fill="#c9a96e" opacity="0.5"/>
+              <line x1="55" y1="30" x2="55" y2="130" stroke="#c9a96e" stroke-width="0.3" opacity="0.15"/>
+              <line x1="5" y1="80" x2="105" y2="80" stroke="#c9a96e" stroke-width="0.3" opacity="0.15"/>
+              <line x1="19" y1="44" x2="91" y2="116" stroke="#c9a96e" stroke-width="0.3" opacity="0.15"/>
+              <line x1="91" y1="44" x2="19" y2="116" stroke="#c9a96e" stroke-width="0.3" opacity="0.15"/>
+            </svg>
+          </div>
+          <div class="card-face card-front" id="front1"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-slot">
+      <div class="pos-label">Futuro</div>
+      <div class="card-flip" id="flip2" onclick="flip(2)">
+        <div class="card-inner" id="inner2">
+          <div class="card-face card-back" id="back2">
+            <svg width="110" height="160" viewBox="0 0 110 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="55" cy="80" r="50" stroke="#c9a96e" stroke-width="0.5" opacity="0.5"/>
+              <circle cx="55" cy="80" r="38" stroke="#c9a96e" stroke-width="0.5" opacity="0.35"/>
+              <circle cx="55" cy="80" r="26" stroke="#c9a96e" stroke-width="0.5" opacity="0.2"/>
+              <polygon points="55,38 66,61 91,61 71,76 79,99 55,84 31,99 39,76 19,61 44,61" stroke="#c9a96e" stroke-width="0.5" fill="none" opacity="0.6"/>
+              <circle cx="55" cy="80" r="5" fill="#c9a96e" opacity="0.5"/>
+              <line x1="55" y1="30" x2="55" y2="130" stroke="#c9a96e" stroke-width="0.3" opacity="0.15"/>
+              <line x1="5" y1="80" x2="105" y2="80" stroke="#c9a96e" stroke-width="0.3" opacity="0.15"/>
+              <line x1="19" y1="44" x2="91" y2="116" stroke="#c9a96e" stroke-width="0.3" opacity="0.15"/>
+              <line x1="91" y1="44" x2="19" y2="116" stroke="#c9a96e" stroke-width="0.3" opacity="0.15"/>
+            </svg>
+          </div>
+          <div class="card-face card-front" id="front2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="hint" id="hint">Clique em uma carta para revelar</p>
+
+  <div class="footer-ornament">
+    <div class="footer-line"></div>
+    <div class="footer-glyph">⊕</div>
+    <div class="footer-line"></div>
+  </div>
+
+</div>
+
+<script>
+// Generate stars
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 80; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 1.5 + 0.5;
+  s.style.cssText = `
+    width:${size}px; height:${size}px;
+    top:${Math.random()*100}%;
+    left:${Math.random()*100}%;
+    --dur:${(Math.random()*3+2).toFixed(1)}s;
+    --op:${(Math.random()*0.5+0.1).toFixed(2)};
+    animation-delay:${(Math.random()*4).toFixed(1)}s;
+  `;
+  starsEl.appendChild(s);
+}
+
+const arcanos = [
+  { num: "0", name: "O Louco", deity: "Dionísio", symbol: "🌊", meaning: "Novos começos, espontaneidade e abertura para o desconhecido. Um salto de fé." },
+  { num: "I", name: "O Mago", deity: "Hermes", symbol: "⚡", meaning: "Vontade, habilidade e poder de manifestar. Os recursos estão em suas mãos." },
+  { num: "II", name: "A Sacerdotisa", deity: "Perséfone", symbol: "🌙", meaning: "Intuição, mistério e sabedoria interior. Confie nos seus sonhos e presságios." },
+  { num: "III", name: "A Imperatriz", deity: "Deméter", symbol: "🌿", meaning: "Abundância, fertilidade e amor materno. Um ciclo de criação e nutrição." },
+  { num: "IV", name: "O Imperador", deity: "Zeus", symbol: "⚜️", meaning: "Autoridade, estrutura e poder. Momento de estabelecer bases sólidas." },
+  { num: "V", name: "O Hierofante", deity: "Quíron", symbol: "🏛️", meaning: "Tradição, ensinamento e caminho espiritual. Busque um guia ou mentoria." },
+  { num: "VI", name: "Os Enamorados", deity: "Eros & Psiquê", symbol: "✨", meaning: "União, escolha e alinhamento com seus valores mais profundos." },
+  { num: "VII", name: "O Carro", deity: "Ares", symbol: "🔱", meaning: "Determinação, controle e vitória. Direcione sua força com propósito." },
+  { num: "VIII", name: "A Força", deity: "Héracles", symbol: "🦁", meaning: "Coragem interior, paciência e compaixão. A força real vem de dentro." },
+  { num: "IX", name: "O Eremita", deity: "Cronos", symbol: "🕯️", meaning: "Recolhimento, busca interior e sabedoria. É hora de olhar para dentro." },
+  { num: "X", name: "Roda da Fortuna", deity: "Moiras", symbol: "☯️", meaning: "Ciclos, destino e mudança inevitável. Uma nova fase se inicia." },
+  { num: "XI", name: "A Justiça", deity: "Atena", symbol: "⚖️", meaning: "Equilíbrio, verdade e responsabilidade. As ações têm consequências justas." },
+  { num: "XII", name: "O Enforcado", deity: "Prometeu", symbol: "🌀", meaning: "Sacrifício, suspensão e nova perspectiva. Entregue-se para ganhar clareza." },
+  { num: "XIII", name: "A Morte", deity: "Hades", symbol: "🌑", meaning: "Transformação profunda e encerramento de ciclos. Um renascimento se aproxima." },
+  { num: "XIV", name: "A Temperança", deity: "Íris", symbol: "🌈", meaning: "Moderação, equilíbrio e harmonia. Integre os opostos com paciência." },
+  { num: "XV", name: "O Diabo", deity: "Pan", symbol: "🔗", meaning: "Apegos, ilusões e sombra. O que te prende ainda pode ser libertado." },
+  { num: "XVI", name: "A Torre", deity: "Posêidon", symbol: "⚡", meaning: "Ruptura súbita e revelação. O que cai precisava cair para liberar o novo." },
+  { num: "XVII", name: "A Estrela", deity: "Afrodite", symbol: "⭐", meaning: "Esperança, renovação e beleza. Você é guiada por uma luz mais alta." },
+  { num: "XVIII", name: "A Lua", deity: "Ártemis", symbol: "🌕", meaning: "Inconsciente, medos e ciclos lunares. Nem tudo é o que parece ser." },
+  { num: "XIX", name: "O Sol", deity: "Apolo", symbol: "☀️", meaning: "Alegria, clareza e sucesso. Um período luminoso e de grande vitalidade." },
+  { num: "XX", name: "O Julgamento", deity: "Hermes Psicopompo", symbol: "🕊️", meaning: "Chamado, despertar e absolvição. É hora de responder ao chamado da alma." },
+  { num: "XXI", name: "O Mundo", deity: "Gaia", symbol: "🌍", meaning: "Completude, integração e realização plena. Um ciclo se encerra com maestria." }
+];
+
+let drawn = [];
+let flipped = [false, false, false];
+let shuffled = false;
+
+function shuffle() {
+  const btn = document.getElementById('btnShuffle');
+  const dots = document.getElementById('shuffleDots');
+
+  btn.disabled = true;
+  dots.classList.add('active');
+  shuffled = false;
+  flipped = [false, false, false];
+
+  [0,1,2].forEach(i => {
+    document.getElementById('inner'+i).classList.remove('flipped');
+    document.getElementById('flip'+i).classList.remove('done');
+  });
+
+  document.getElementById('hint').textContent = 'Os deuses estão revelando as cartas...';
+
+  setTimeout(() => {
+    const pool = [...arcanos];
+    drawn = [];
+    while (drawn.length < 3) {
+      const idx = Math.floor(Math.random() * pool.length);
+      const card = {...pool[idx]};
+      card.reversed = Math.random() < 0.3;
+      drawn.push(card);
+      pool.splice(idx, 1);
+    }
+
+    drawn.forEach((card, i) => {
+      const front = document.getElementById('front'+i);
+      front.className = 'card-face card-front' + (card.reversed ? ' reversed-card' : '');
+      front.innerHTML = `
+        <div class="card-num">${card.num}</div>
+        <div class="card-symbol">${card.symbol}</div>
+        <div class="card-name">${card.name}</div>
+        <div class="card-deity">${card.deity}</div>
+        <div class="card-divider"></div>
+        <div class="card-meaning">${card.meaning}</div>
+        ${card.reversed ? '<div class="tag-reversed">↓ Invertida</div>' : ''}
+      `;
+    });
+
+    dots.classList.remove('active');
+    btn.disabled = false;
+    shuffled = true;
+    document.getElementById('hint').textContent = 'Clique em cada carta para revelar';
+  }, 1600);
+}
+
+function flip(i) {
+  if (!shuffled || flipped[i]) return;
+  flipped[i] = true;
+  document.getElementById('inner'+i).classList.add('flipped');
+  document.getElementById('flip'+i).classList.add('done');
+
+  if (flipped.every(Boolean)) {
+    document.getElementById('hint').textContent = 'Embaralhe novamente para uma nova tiragem';
+  }
+}
+</script>
+</body>
+</html>
