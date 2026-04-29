@@ -359,18 +359,8 @@
       <div class="pos-label">Passado</div>
       <div class="card-flip" id="flip0" onclick="flip(0)">
         <div class="card-inner" id="inner0">
-          <div class="card-face card-back">
-            <svg width="120" height="170" viewBox="0 0 120 170" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="60" cy="85" r="52" stroke="#b8943a" stroke-width="0.5" opacity="0.4"/>
-              <circle cx="60" cy="85" r="40" stroke="#b8943a" stroke-width="0.5" opacity="0.3"/>
-              <circle cx="60" cy="85" r="28" stroke="#b8943a" stroke-width="0.5" opacity="0.2"/>
-              <polygon points="60,42 72,67 99,67 78,83 86,108 60,92 34,108 42,83 21,67 48,67" stroke="#b8943a" stroke-width="0.5" fill="none" opacity="0.55"/>
-              <circle cx="60" cy="85" r="5" fill="#b8943a" opacity="0.35"/>
-              <line x1="60" y1="33" x2="60" y2="137" stroke="#b8943a" stroke-width="0.3" opacity="0.12"/>
-              <line x1="8" y1="85" x2="112" y2="85" stroke="#b8943a" stroke-width="0.3" opacity="0.12"/>
-              <line x1="23" y1="48" x2="97" y2="122" stroke="#b8943a" stroke-width="0.3" opacity="0.12"/>
-              <line x1="97" y1="48" x2="23" y2="122" stroke="#b8943a" stroke-width="0.3" opacity="0.12"/>
-            </svg>
+          <div class="card-face card-back" id="back0">
+            <div style="font-size: 52px; opacity: 0.85;">⭐</div>
           </div>
           <div class="card-face card-front" id="front0"></div>
         </div>
@@ -381,18 +371,8 @@
       <div class="pos-label">Presente</div>
       <div class="card-flip" id="flip1" onclick="flip(1)">
         <div class="card-inner" id="inner1">
-          <div class="card-face card-back">
-            <svg width="120" height="170" viewBox="0 0 120 170" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="60" cy="85" r="52" stroke="#b8943a" stroke-width="0.5" opacity="0.4"/>
-              <circle cx="60" cy="85" r="40" stroke="#b8943a" stroke-width="0.5" opacity="0.3"/>
-              <circle cx="60" cy="85" r="28" stroke="#b8943a" stroke-width="0.5" opacity="0.2"/>
-              <polygon points="60,42 72,67 99,67 78,83 86,108 60,92 34,108 42,83 21,67 48,67" stroke="#b8943a" stroke-width="0.5" fill="none" opacity="0.55"/>
-              <circle cx="60" cy="85" r="5" fill="#b8943a" opacity="0.35"/>
-              <line x1="60" y1="33" x2="60" y2="137" stroke="#b8943a" stroke-width="0.3" opacity="0.12"/>
-              <line x1="8" y1="85" x2="112" y2="85" stroke="#b8943a" stroke-width="0.3" opacity="0.12"/>
-              <line x1="23" y1="48" x2="97" y2="122" stroke="#b8943a" stroke-width="0.3" opacity="0.12"/>
-              <line x1="97" y1="48" x2="23" y2="122" stroke="#b8943a" stroke-width="0.3" opacity="0.12"/>
-            </svg>
+          <div class="card-face card-back" id="back1">
+            <div style="font-size: 52px; opacity: 0.85;">🌙</div>
           </div>
           <div class="card-face card-front" id="front1"></div>
         </div>
@@ -403,18 +383,8 @@
       <div class="pos-label">Futuro</div>
       <div class="card-flip" id="flip2" onclick="flip(2)">
         <div class="card-inner" id="inner2">
-          <div class="card-face card-back">
-            <svg width="120" height="170" viewBox="0 0 120 170" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="60" cy="85" r="52" stroke="#b8943a" stroke-width="0.5" opacity="0.4"/>
-              <circle cx="60" cy="85" r="40" stroke="#b8943a" stroke-width="0.5" opacity="0.3"/>
-              <circle cx="60" cy="85" r="28" stroke="#b8943a" stroke-width="0.5" opacity="0.2"/>
-              <polygon points="60,42 72,67 99,67 78,83 86,108 60,92 34,108 42,83 21,67 48,67" stroke="#b8943a" stroke-width="0.5" fill="none" opacity="0.55"/>
-              <circle cx="60" cy="85" r="5" fill="#b8943a" opacity="0.35"/>
-              <line x1="60" y1="33" x2="60" y2="137" stroke="#b8943a" stroke-width="0.3" opacity="0.12"/>
-              <line x1="8" y1="85" x2="112" y2="85" stroke="#b8943a" stroke-width="0.3" opacity="0.12"/>
-              <line x1="23" y1="48" x2="97" y2="122" stroke="#b8943a" stroke-width="0.3" opacity="0.12"/>
-              <line x1="97" y1="48" x2="23" y2="122" stroke="#b8943a" stroke-width="0.3" opacity="0.12"/>
-            </svg>
+          <div class="card-face card-back" id="back2">
+            <div style="font-size: 52px; opacity: 0.85;">☀️</div>
           </div>
           <div class="card-face card-front" id="front2"></div>
         </div>
@@ -491,12 +461,17 @@ drawn.forEach((card,i)=>{
       front.className='card-face card-front'+(card.reversed?' reversed-card':'');
       front.innerHTML=`
         <div class="card-num">${card.num}</div>
-        <div class="card-symbol">${posIcons[i]}</div>
+        <div class="card-symbol">${card.symbol}</div>
         <div class="card-name">${card.name}</div>
         <div class="card-deity">${card.deity}</div>
         <div class="card-divider"></div>
         <div class="card-meaning">${card.meaning}</div>
         ${card.reversed?'<div class="tag-reversed">↓ invertida</div>':''}
+      `;
+
+      // Update back face with position icon
+      document.getElementById('back'+i).innerHTML = `
+        <div style="font-size: 52px; opacity: 0.85;">${posIcons[i]}</div>
       `;
     });
     dots.classList.remove('active'); btn.disabled=false; shuffled=true;
